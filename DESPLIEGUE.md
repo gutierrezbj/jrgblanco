@@ -18,14 +18,19 @@ Comprobar: `dig +short jrgblanco.com` y `dig +short www.jrgblanco.com` devuelven
 - Prueba antes de publicar: enviar un correo a hablamos@ desde Gmail y responder desde hablamos@; verificar en mail-tester.com o en «Mostrar original» de Gmail que SPF, DKIM y DMARC salen PASS.
 - Los registros A/AAAA de la web y los MX del correo conviven en la misma zona: la web apunta al VPS, el correo a Hostinger. No usar el VPS para correo.
 
-## 2. Ficheros en el servidor
+## 2. Container en el servidor (offset +250, patrón AgroWeb)
+La web la sirve un container `nginx:1.27-alpine` (`jrgb-web`) en `127.0.0.1:3250`, definido en `docker-compose.yml` y `nginx.conf` de este repo (`gutierrezbj/jrgblanco`). Caché por tipo de fichero y `/health` viven en ese `nginx.conf`.
 ```
-sudo mkdir -p /var/www/jrgblanco.com
-# subir el contenido de esta carpeta (index.html, legal.html, fonts/, favicon.ico, og.png, jrgb-*.svg/png)
-sudo chown -R www-data:www-data /var/www/jrgblanco.com
+cd /opt/apps && git clone https://github.com/gutierrezbj/jrgblanco.git jrgb-web
+cd jrgb-web && docker compose up -d
+curl -s http://127.0.0.1:3250/health          # ok
+ss -tlnp | grep docker-proxy | grep 0.0.0.0   # debe estar vacío
 ```
+Actualizar la web: push al repo y en el VPS `cd /opt/apps/jrgb-web && git pull`. Los ficheros van montados en solo lectura, no hace falta reiniciar el container (sí si cambia `nginx.conf` o `docker-compose.yml`: `docker compose up -d --force-recreate`).
 
-## 3. nginx — `/etc/nginx/sites-available/jrgblanco.com`
+Registro en la casa: `"JRGB-Web|jrgb-web|docker"` en `/opt/scripts/healthcheck.sh` y proyecto `JRGB` en el monitor SA99 (Mongo `sa99.servers.vps-prod.projects.JRGB`).
+
+## 3. nginx del VPS — `/etc/nginx/sites-available/jrgblanco.com`
 Primero el snippet de cabeceras, `/etc/nginx/snippets/jrgblanco-security.conf`:
 ```nginx
 add_header X-Content-Type-Options "nosniff" always;
@@ -33,7 +38,7 @@ add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
 add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
 ```
-Después el sitio:
+Después el sitio, que solo hace proxy al container:
 ```nginx
 # www → raíz (una sola web indexada)
 server {
@@ -47,31 +52,23 @@ server {
     listen 80;
     listen [::]:80;
     server_name jrgblanco.com;
-    root /var/www/jrgblanco.com;
-    index index.html;
-
-    # fuentes autoalojadas: caché larga e inmutable (se versionan por nombre si cambian)
-    location /fonts/ {
-        add_header Cache-Control "public, max-age=31536000, immutable";
-        add_header Access-Control-Allow-Origin "https://jrgblanco.com";
-        include snippets/jrgblanco-security.conf;
-        try_files $uri =404;
-    }
-
-    location ~* \.(png|svg|ico)$ {
-        add_header Cache-Control "public, max-age=604800";
-        include snippets/jrgblanco-security.conf;
-        try_files $uri =404;
-    }
 
     location / {
-        add_header Cache-Control "public, max-age=600";
-        include snippets/jrgblanco-security.conf;
-        try_files $uri $uri/ =404;
+        proxy_pass http://127.0.0.1:3250;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 30s;
     }
 
-    # cabeceras mínimas de seguridad: un add_header dentro de location anula los del server,
-    # por eso el snippet se incluye en cada location además de aquí
+    location = /health {
+        proxy_pass http://127.0.0.1:3250/health;
+        access_log off;
+    }
+
+    # cabeceras de seguridad: sin add_header en las location, se heredan del server
     include snippets/jrgblanco-security.conf;
 
     # gzip/brotli: heredado del bloque http del Manifiesto SDD-JRGB (comprobar en el paso 5)
