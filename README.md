@@ -154,6 +154,8 @@ Todas las transiciones usan una sola curva: `cubic-bezier(.22, 1, .36, 1)`.
 ├── jrgb-favicon-180.png  apple-touch-icon
 ├── jrgb-icono-brea.svg   el sello
 ├── capturas/             el showreel y el pez de volver arriba
+├── docker-compose.yml    el contenedor nginx alpine que la sirve
+├── nginx.conf            caché por tipo de fichero y /health
 └── DESPLIEGUE.md         runbook: DNS, nginx, TLS y verificación
 ```
 
@@ -171,7 +173,7 @@ Y abrir <http://localhost:8000>.
 
 ## Desplegar
 
-La web es estática y se sirve con **nginx** en un VPS Ubuntu, con TLS de Let's Encrypt, Brotli y cabeceras de seguridad (HSTS, `nosniff`, `Referrer-Policy`, `Permissions-Policy`). El paso a paso completo, con la verificación posterior que no se salta nunca, está en **[DESPLIEGUE.md](DESPLIEGUE.md)**.
+La web es estática y vive en un contenedor **nginx alpine** (`docker compose up -d`, solo en `127.0.0.1`) detrás del nginx de un VPS Ubuntu, con TLS de Let's Encrypt, Brotli y cabeceras de seguridad (HSTS, `nosniff`, `Referrer-Policy`, `Permissions-Policy`). El paso a paso completo, con la verificación posterior que no se salta nunca, está en **[DESPLIEGUE.md](DESPLIEGUE.md)**.
 
 ---
 
