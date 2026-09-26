@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="170" viewBox="0 0 880 170" font-family="Helvetica, Arial, sans-serif">
+  <rect width="880" height="170" rx="18" fill="#0B0B0D"/>
+  <g font-size="12" font-weight="700" letter-spacing="1.5">
+    <rect x="24" y="24" width="150" height="86" rx="10" fill="#0B0B0D" stroke="#2A2B31" stroke-width="2"/>
+    <text x="24" y="134" fill="#EDE8DD">BREA</text><text x="24" y="152" fill="#8a8578" font-weight="400">#0B0B0D · impacto</text>
+    <rect x="194" y="24" width="150" height="86" rx="10" fill="#0D1A2B"/>
+    <text x="194" y="134" fill="#EDE8DD">MARINO</text><text x="194" y="152" fill="#8a8578" font-weight="400">#0D1A2B · lectura</text>
+    <rect x="364" y="24" width="150" height="86" rx="10" fill="#EDE8DD"/>
+    <text x="364" y="134" fill="#EDE8DD">HUESO</text><text x="364" y="152" fill="#8a8578" font-weight="400">#EDE8DD · papel</text>
+    <rect x="534" y="24" width="150" height="86" rx="10" fill="#2A2B31"/>
+    <text x="534" y="134" fill="#EDE8DD">HUMO</text><text x="534" y="152" fill="#8a8578" font-weight="400">#2A2B31 · líneas</text>
+    <rect x="704" y="24" width="152" height="86" rx="10" fill="#F2A81D"/>
+    <text x="704" y="134" fill="#F2A81D">ÁMBAR</text><text x="704" y="152" fill="#8a8578" font-weight="400">#F2A81D · la señal</text>
+  </g>
+</svg>
