@@ -1,0 +1,33 @@
+# jrgb-web — web personal estática containerizada
+# Convención JRGB: offset +250 (siguiente libre tras RadioPirata +240)
+# Patrón heredado: AgroWeb (nginx alpine + volumes raw)
+
+services:
+  jrgb-web:
+    image: nginx:1.27-alpine
+    container_name: jrgb-web
+    restart: unless-stopped
+    # bind SOLO a 127.0.0.1 — healthcheck.sh alerta si se expone a 0.0.0.0
+    ports:
+      - "127.0.0.1:3250:80"
+    volumes:
+      # HTML estático puro — sin build, se sirve tal cual el repo
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+      - ./legal.html:/usr/share/nginx/html/legal.html:ro
+      - ./fonts:/usr/share/nginx/html/fonts:ro
+      - ./og.png:/usr/share/nginx/html/og.png:ro
+      - ./favicon.ico:/usr/share/nginx/html/favicon.ico:ro
+      - ./jrgb-favicon-180.png:/usr/share/nginx/html/jrgb-favicon-180.png:ro
+      - ./jrgb-icono-brea.svg:/usr/share/nginx/html/jrgb-icono-brea.svg:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    healthcheck:
+      # 127.0.0.1 y no localhost: en alpine localhost resuelve a ::1 y nginx solo escucha en IPv4
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    labels:
+      - "jrgb.project=jrgb-web"
+      - "jrgb.offset=250"
+      - "jrgb.domain=jrgblanco.com"
