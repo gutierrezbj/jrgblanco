@@ -26,7 +26,7 @@ cd jrgb-web && docker compose up -d
 curl -s http://127.0.0.1:3250/health          # ok
 ss -tlnp | grep docker-proxy | grep 0.0.0.0   # debe estar vacío
 ```
-Actualizar la web: push al repo y en el VPS `cd /opt/apps/jrgb-web && git pull`. Los ficheros van montados en solo lectura, no hace falta reiniciar el container (sí si cambia `nginx.conf` o `docker-compose.yml`: `docker compose up -d --force-recreate`).
+Actualizar la web: push al repo y en el VPS `cd /opt/apps/jrgb-web && git pull && docker compose up -d --force-recreate`. El recreate es obligatorio: los ficheros sueltos (index.html, legal.html…) van montados uno a uno y, como git los sustituye por ficheros nuevos, el container seguiría sirviendo la versión anterior. Las carpetas montadas (`fonts/`, `media/`) sí se actualizan solas.
 
 Registro en la casa: `"JRGB-Web|jrgb-web|docker"` en `/opt/scripts/healthcheck.sh` y proyecto `JRGB` en el monitor SA99 (Mongo `sa99.servers.vps-prod.projects.JRGB`).
 
