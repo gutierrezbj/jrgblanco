@@ -15,6 +15,7 @@ services:
       - ./index.html:/usr/share/nginx/html/index.html:ro
       - ./legal.html:/usr/share/nginx/html/legal.html:ro
       - ./fonts:/usr/share/nginx/html/fonts:ro
+      - ./media:/usr/share/nginx/html/media:ro
       - ./og.png:/usr/share/nginx/html/og.png:ro
       - ./favicon.ico:/usr/share/nginx/html/favicon.ico:ro
       - ./jrgb-favicon-180.png:/usr/share/nginx/html/jrgb-favicon-180.png:ro

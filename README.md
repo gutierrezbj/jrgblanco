@@ -117,14 +117,14 @@ Todas las transiciones usan una sola curva: `cubic-bezier(.22, 1, .36, 1)`.
 <td width="50%" valign="top">
 
 ### Viva
-- **Showreel de partículas:** unos 3.000 puntos en un `<canvas>` se agrupan en «JRGB» con el scroll, dan una vuelta en 3D y se quedan en trama con un latido ámbar.
-- Dibujo por lotes con `Path2D`, sin librerías.
+- **Ultrafast, el corto:** un bucle mudo en la cabecera y en el showreel, y la película completa con sonido en un visor a pantalla completa.
+- Los bucles solo corren a la vista; el corto no pesa nada hasta que le das al play.
 
 </td>
 <td width="50%" valign="top">
 
 ### Cuidadosa
-- Respeta `prefers-reduced-motion`: sin movimiento, las partículas se pintan ya ordenadas.
+- Respeta `prefers-reduced-motion`: sin movimiento, los vídeos se quedan en su póster.
 - Tarjeta de previsualización Open Graph completa para WhatsApp y LinkedIn.
 - Datos estructurados `Person` en JSON-LD.
 
@@ -133,8 +133,8 @@ Todas las transiciones usan una sola curva: `cubic-bezier(.22, 1, .36, 1)`.
 </table>
 
 <div align="center">
-<img src="capturas/showreel-jrgb-final.gif" alt="Showreel de partículas formando JRGB" width="80%">
-<br><sub>El showreel, mientras llega el vídeo de verdad.</sub>
+<a href="https://jrgblanco.com/#showreel"><img src="media/ultrafast.jpg" alt="Fotograma de Ultrafast" width="80%"></a>
+<br><sub><b>Ultrafast</b> · un ingeniero, un CPD caído a las 19:00 y siete mundos por el camino. Velo en la web.</sub>
 </div>
 
 ---
@@ -153,6 +153,7 @@ Todas las transiciones usan una sola curva: `cubic-bezier(.22, 1, .36, 1)`.
 ├── favicon.ico
 ├── jrgb-favicon-180.png  apple-touch-icon
 ├── jrgb-icono-brea.svg   el sello
+├── media/                el corto Ultrafast, su bucle, pósters y el sello 3D
 ├── capturas/             el showreel y el pez de volver arriba
 ├── docker-compose.yml    el contenedor nginx alpine que la sirve
 ├── nginx.conf            caché por tipo de fichero y /health
@@ -179,7 +180,7 @@ La web es estática y vive en un contenedor **nginx alpine** (`docker compose up
 
 ## En el horizonte
 
-- [ ] El vídeo de verdad en el hero y en el showreel, en lugar de las partículas.
+- [x] El vídeo de verdad en el hero y en el showreel: **Ultrafast**.
 - [ ] WhatsApp como cuarta puerta de contacto.
 - [ ] «El cruce»: los tres oficios en un diagrama animado en SVG.
 - [ ] Foto y testimonio.
@@ -189,6 +190,7 @@ La web es estática y vive en un contenedor **nginx alpine** (`docker compose up
 
 | Versión | Qué trajo |
 |---|---|
+| **7.4** | El corto Ultrafast en la cabecera y el showreel, con visor a pantalla completa. |
 | **7.2** | Fuentes autoalojadas, showreel de partículas, pez de volver arriba, aviso legal, correo del dominio, cabeceras de seguridad y tarjeta Open Graph completa. En producción desde el 26-09-2026. |
 | **7.1** | Estructura de seis capítulos y la regla del «qué te llevas tú». |
 | **6** | Primera versión con el sistema de marca Aguja. |
